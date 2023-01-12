@@ -1,19 +1,21 @@
-import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
-import { response } from 'express';
-import { Observable, catchError, map } from 'rxjs';
+import { HttpService } from '@nestjs/axios/dist/http.service';
+import { Injectable } from '@nestjs/common';
+//import { HttpService } from '@nestjs/axios';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class JobListService {
-  // const response = this.httpService
-  //   .get('https://abc.com/api/v2/branches')
-  //   .pipe(
-  //     map((response) => response.data),
-  //     catchError((e) => {
-  //       throw new HttpException(e.response.data, e.response.status);
-  //     }),
-  //   );
-  // httpService: any;
-  // return response;
+  constructor(private http: HttpService) {}
+
+  getJobLists() {
+    return this.http
+      .get('http://dev3.dansmultipro.co.id/api/recruitment/positions.json')
+      .pipe(map((response) => response.data));
+  }
+
+  getJobList(id) {
+    return this.http
+      .get('http://dev3.dansmultipro.co.id/api/recruitment/positions.json' + id)
+      .pipe(map((response) => response.data));
+  }
 }

@@ -1,21 +1,40 @@
 import { HttpService } from '@nestjs/axios/dist/http.service';
 import { Injectable } from '@nestjs/common';
-//import { HttpService } from '@nestjs/axios';
-import { map } from 'rxjs/operators';
+import { firstValueFrom, map } from 'rxjs';
+import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class JobListService {
+  [x: string]: any;
   constructor(private http: HttpService) {}
 
-  getJobLists() {
-    return this.http
-      .get('http://dev3.dansmultipro.co.id/api/recruitment/positions.json')
-      .pipe(map((response) => response.data));
+  async getJobLists() {
+    const { data } = await firstValueFrom(
+      this.http.get(
+        'http://dev3.dansmultipro.co.id/api/recruitment/positions.json',
+      ),
+    );
+    return data;
   }
 
-  getJobList(id) {
-    return this.http
-      .get('http://dev3.dansmultipro.co.id/api/recruitment/positions.json' + id)
-      .pipe(map((response) => response.data));
+  async getJobList(id) {
+    const { data } = await firstValueFrom(
+      this.http.get(
+        'http://dev3.dansmultipro.co.id/api/recruitment/positions.json' + id,
+      ),
+    );
+    return data;
+  }
+
+  async findJob(desc: string, loc: string) {
+    const { data } = await firstValueFrom(
+      this.http.get(
+        'http://dev3.dansmultipro.co.id/api/recruitment/positions.json' +
+          desc +
+          '&location=' +
+          loc,
+      ),
+    );
+    return data;
   }
 }

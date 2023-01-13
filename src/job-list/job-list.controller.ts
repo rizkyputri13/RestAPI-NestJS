@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { JobListService } from './job-list.service';
 
 @Controller('jobs')
@@ -13,5 +13,12 @@ export class JobListController {
   @Get('/jobList/:id')
   getJob(@Param('id') id) {
     return this.jobListService.getJobList(id);
+  }
+
+  @Post('/jobList/search')
+  async getSearch(@Body() fields: any) {
+    const desc = fields.description.toLowerCase();
+    const loc = fields.location.toLowerCase();
+    return this.jobListService.findJob(desc, loc);
   }
 }
